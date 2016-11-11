@@ -2,9 +2,16 @@ package TSE.P_INFO.CosmopoliTse;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -67,8 +74,45 @@ public class DaveHttp {
     	String tagTopAnswerer=obj.getJSONArray("items").getJSONObject(0).getJSONObject("user").getString("display_name");
     	return tagTopAnswerer;
     }
+    public static String thirdStoryDave() throws IOException{
+    	Scanner in = new Scanner(System.in);
+    	Scanner in1 = new Scanner(System.in);
+    	System.out.println("Commbien de tag vous voulez inserer?");
+    	int nombre = in.nextInt();
+    	List<String> tagList = new ArrayList<String>();
+    	Map<String,Long> userScoreMap = new HashMap<String, Long>();
+    	List <Map<String,Long>> listUserScoreMap = new ArrayList<Map<String,Long>>();
+    	for(int i=0;i<nombre;i++){
+    		System.out.println("Inserer le "+(i+1)+" tag");
+    		String tags = in1.nextLine();
+    		tagList.add(tags);
+    	}
+    	for(String tt:tagList){
+    		String url = "https://api.stackexchange.com/2.2/tags/" + tt + "/top-answerers/all_time?site=stackoverflow";
+        	String jsonString = DaveHttp.sendGet(url);
+        	JSONObject obj= new JSONObject(jsonString); 
+        	for(int j=0;j<20;j++){
+        		String nom = obj.getJSONArray("items").getJSONObject(j).getJSONObject("user").getString("display_name");
+        		Long score = obj.getJSONArray("items").getJSONObject(j).getLong("score");
+        		userScoreMap.put(nom,score);
+        	}
+        	listUserScoreMap.add(userScoreMap);
+    	}
+    	for(Map<String,Long> map: listUserScoreMap){
+    		for (String s : map.keySet()) {
+    			System.out.println("nom:" + s);
+    			System.out.println("score:" + map.get(s));
+    		}
+    		System.out.println("---------------");
+    	}
+    	
+    	
+    	return "";
+    }
     
     public static void main(String[] args) throws IOException {
-        System.out.println(DaveHttp.secondStoryDave("C++"));
+       // System.out.println(DaveHttp.secondStoryDave("java"));
+    	thirdStoryDave();
+    	
     }
 }
