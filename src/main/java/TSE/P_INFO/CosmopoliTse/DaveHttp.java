@@ -3,13 +3,16 @@ package TSE.P_INFO.CosmopoliTse;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
 import org.json.JSONObject;
@@ -67,6 +70,34 @@ public class DaveHttp {
         // Return
         return result;
     }
+	
+	public static void firstStory() throws IOException{
+		Scanner in = new Scanner(System.in);
+		System.out.println("Sur quel sujet voulez-vous effectuer la recherche?");
+		String tag = in.nextLine();
+		System.out.println("Combien de contributeurs souhaitez-vous afficher?");
+		int count=in.nextInt();
+		String url = "https://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time?page=1&pagesize="+count+"&site=stackoverflow";
+		String jsonString = DaveHttp.sendGet(url);
+		JSONObject obj= new JSONObject(jsonString);
+		List<String> contributorsNames = new ArrayList<String>();
+		List<Long> contributorsScores = new ArrayList<Long>();
+		for(int i=0;i<count;i++)
+		{
+			String nom = obj.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name");
+			contributorsNames.add(nom);
+			Long score = obj.getJSONArray("items").getJSONObject(i).getLong("score");
+			contributorsScores.add(score);
+		}
+		
+		
+		System.out.println("Les meilleurs contributeurs (Nom : Score) au sujet " + tag + " sont: ");
+		for(int i=0;i<contributorsNames.size();i++)
+		{
+			System.out.println(contributorsNames.get(i) + ": " + contributorsScores.get(i));
+		}
+	}
+	
     public static String secondStoryDave(String Tag) throws IOException{
     	String url = "https://api.stackexchange.com/2.2/tags/" + Tag + "/top-answerers/all_time?page=1&pagesize=1&site=stackoverflow";
     	String jsonString = DaveHttp.sendGet(url);
@@ -74,6 +105,7 @@ public class DaveHttp {
     	String tagTopAnswerer=obj.getJSONArray("items").getJSONObject(0).getJSONObject("user").getString("display_name");
     	return tagTopAnswerer;
     }
+    
     public static String thirdStoryDave() throws IOException{
     	Scanner in = new Scanner(System.in);
     	Scanner in1 = new Scanner(System.in);
@@ -110,9 +142,46 @@ public class DaveHttp {
     	return "";
     }
     
+    public static void menu() throws IOException{
+    	System.out.println("Que souhaitez-vous afficher?");
+    	System.out.println("1: Les personnes contribuant le plus à un sujet donné");
+    	System.out.println("2: La personne qui a le top tag dans un sujet donné");
+    	System.out.println("3: La personne qui contribue le plus à un ensemble de tags donnés");
+    	Scanner in = new Scanner(System.in);
+    	
+    	boolean continuer=false;
+    	
+    	do
+    	{
+    		int choix=in.nextInt();
+	    	switch (choix)
+	    	{
+	    	  case 1:
+	    		  firstStory();
+	    		  continuer=false;
+	    	    break;  
+	    	  case 2:
+	    		  secondStoryDave("java");
+	    		  continuer=false;
+	    		  break;
+	    	  case 3:
+	    		  thirdStoryDave();
+	    		  continuer=false;
+	    		  break;
+	    	  default:
+	    		  System.out.println("Erreur de choix, veuillez recommencer.");
+	    		  continuer=true;
+	    		  break;
+	    	}
+	    	
+    	}while(continuer);
+    }
+    
     public static void main(String[] args) throws IOException {
-       // System.out.println(DaveHttp.secondStoryDave("java"));
-    	thirdStoryDave();
+    	menu();
+    	//firstStory();
+       //System.out.println(DaveHttp.secondStoryDave("javascript"));
+    	//thirdStoryDave();
     	
     }
 }
