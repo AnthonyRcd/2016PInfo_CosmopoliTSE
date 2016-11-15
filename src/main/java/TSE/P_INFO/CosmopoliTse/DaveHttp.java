@@ -4,13 +4,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
 import org.json.JSONObject;
@@ -21,8 +17,6 @@ import java.io.IOException;
 public class DaveHttp {
 
 	private static Scanner input= new Scanner(System.in);
-
-	//Uncompress the received dates
 	public static String uncompress(GZIPInputStream in) throws IOException {   
 		 if (in == null) {   
 			 return "";   
@@ -33,41 +27,30 @@ public class DaveHttp {
 		 while ((n = in.read(buffer))>= 0) {   
 		 	out.write(buffer, 0, n);   
 		 }   
-		    // ToString () using the platform default encoding, can also be explicitly specified as toString ()   
 		 return out.toString("utf-8");
 	}   
-	
-    // A request to send a GET method to the specified URL
-    // realUrl: The specified URL
+
 	public static String sendGet(String url) throws IOException {
         String result = "";
         GZIPInputStream in = null;
         
         try {
         	URL realUrl = new URL(url);
-            // Open the connection to servers with one URL
             URLConnection connection = realUrl.openConnection();
-            // Set the generic request properties
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
-            // Establish the actual connection
             connection.connect();
-            // Define GZIPInputStream and uncompress responsive dates from servers
             in = new GZIPInputStream(connection.getInputStream());    
    		    result = uncompress(in);
-   		    
-   		    // Return
    		 	return result;
             
         } catch (Exception e) {
             System.out.println("error in http get!" + e);
             e.printStackTrace();
         }
-        // Use the 'finally' block to close the input stream
         finally {
             in.close();
         }
-        // Return
         return result;
     }
 	
@@ -81,27 +64,32 @@ public class DaveHttp {
 		String url = "https://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time?page=1&pagesize="+20+"&site=stackoverflow";
 		String jsonString = DaveHttp.sendGet(url);
 		JSONObject obj= new JSONObject(jsonString);
-		Map<String,Long> contributors = new HashMap<String,Long>();
-		List<Long> contributorsPostCount = new ArrayList<Long>();
-		for(int i=0;i<20;i++)
-		{
-			String nom = obj.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name");
-			Long score = obj.getJSONArray("items").getJSONObject(i).getLong("post_count");
-			contributorsPostCount.add(score);
-			contributors.put(nom, score);
-		}
+		if(obj.getJSONArray("items").length()==0){
+    		System.out.println("Tag "+tag+" pas trouver, veuillez refaire cette recherche");
+    	}
+		else{
+			Map<String,Long> contributors = new HashMap<String,Long>();
+			List<Long> contributorsPostCount = new ArrayList<Long>();
+			for(int i=0;i<20;i++)
+			{
+				String nom = obj.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name");
+				Long score = obj.getJSONArray("items").getJSONObject(i).getLong("post_count");
+				contributorsPostCount.add(score);
+				contributors.put(nom, score);
+			}
+			
+			contributorsPostCount.sort(null);
 		
-		contributorsPostCount.sort(null);
-	
-		
-		System.out.println("Les meilleurs contributeurs (Nom : Score) au sujet " + tag + " sont: ");
-		for(int i=19;i>=19-(count-1);i--)
-		{
-			for(Map.Entry<String, Long> cont:contributors.entrySet())
-				if(cont.getValue()==contributorsPostCount.get(i))
-				{
-					System.out.println(cont.getKey() + ": " + cont.getValue());
-				}
+			
+			System.out.println("Les meilleurs contributeurs (Nom : Score) au sujet " + tag + " sont: ");
+			for(int i=19;i>=19-(count-1);i--)
+			{
+				for(Map.Entry<String, Long> cont:contributors.entrySet())
+					if(cont.getValue()==contributorsPostCount.get(i))
+					{
+						System.out.println(cont.getKey() + ": " + cont.getValue());
+					}
+			}
 		}
 
 	}
@@ -112,8 +100,13 @@ public class DaveHttp {
     	String url = "https://api.stackexchange.com/2.2/tags/" + Tag + "/top-answerers/all_time?page=1&pagesize=1&site=stackoverflow";
     	String jsonString = DaveHttp.sendGet(url);
     	JSONObject obj= new JSONObject(jsonString);  
-    	String tagTopAnswerer=obj.getJSONArray("items").getJSONObject(0).getJSONObject("user").getString("display_name");
-    	System.out.println("L'utilisateur ayant le Top Tag dans le sujet " + Tag + " est : " + tagTopAnswerer);
+    	if(obj.getJSONArray("items").length()==0){
+    		System.out.println("Tag "+Tag+" pas trouver, veuillez refaire cette recherche");
+    	}
+    	else{
+    		String tagTopAnswerer=obj.getJSONArray("items").getJSONObject(0).getJSONObject("user").getString("display_name");
+    		System.out.println("L'utilisateur ayant le Top Tag dans le sujet " + Tag + " est : " + tagTopAnswerer);
+    	}
     }
     
     public static void thirdStoryDave() throws IOException{
@@ -132,19 +125,25 @@ public class DaveHttp {
     		String url = "https://api.stackexchange.com/2.2/tags/" + tt + "/top-answerers/all_time?site=stackoverflow";
         	String jsonString = DaveHttp.sendGet(url);
         	JSONObject obj= new JSONObject(jsonString); 
-        	for(int j=0;j<20;j++){
-        		int flag=0;
-        		String nom = obj.getJSONArray("items").getJSONObject(j).getJSONObject("user").getString("display_name");
-        		Long post= obj.getJSONArray("items").getJSONObject(j).getLong("post_count");
-        		for (Map.Entry<String, Long> entry : userScoreMap.entrySet()){
-        			if(entry.getKey().equals(nom)){
-        				entry.setValue(post+entry.getValue());
-        				flag=1;
-        			}break;
-        		}
-        		if(flag==0){
-        			userScoreMap.put(nom,post);
-        		}
+        	if(obj.getJSONArray("items").length()==0){
+        		System.out.println("Tag "+tt+" pas trouver, veuillez refaire cette recherche");
+        		tagList.remove(tt);
+        	}
+        	else{
+	        	for(int j=0;j<20;j++){
+	        		int flag=0;
+	        		String nom = obj.getJSONArray("items").getJSONObject(j).getJSONObject("user").getString("display_name");
+	        		Long post= obj.getJSONArray("items").getJSONObject(j).getLong("post_count");
+	        		for (Map.Entry<String, Long> entry : userScoreMap.entrySet()){
+	        			if(entry.getKey().equals(nom)){
+	        				entry.setValue(post+entry.getValue());
+	        				flag=1;
+	        			}break;
+	        		}
+	        		if(flag==0){
+	        			userScoreMap.put(nom,post);
+	        		}
+	        	}
         	}
     	}
     	Long max =(long) 0; 
