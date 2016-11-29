@@ -59,29 +59,7 @@ public class Alice {
         		System.out.println(lienQuestions);
         	}
         	System.out.println("");
-    	}
-    	/*do 
-    	{
-    		if(obj.getJSONArray("items").length()==0)
-    		{
-	    		System.out.println("Nom "+ inname +" non trouvé, veuillez resaisir votre nom");
-	    		inname = input.nextLine();
-	    		page=1;
-	    		url = "/2.2/users?order=desc&sort=name&inname=" + inname +"&site=stackoverflow";
-	        	jsonString = DaveHttp.sendGet(url);
-	        	obj = new JSONObject(jsonString);
-	    		continuer=true;
-    		}
-    		else 
-    		{
-    			
-    			
-    		}
-	    
-    	}*/
-    	
-    	
-		
+    	}	
 	}
 	public static void thirdStoryAlice() throws IOException{
 		System.out.println("Trier les questions auxquelles j’ai répondu en fonction de leur taux de succès :");
