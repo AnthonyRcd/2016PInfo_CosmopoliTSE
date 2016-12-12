@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,59 +17,68 @@ public class Alice {
 	 * @author Bou-Zogheib Diane
 	 * @throws IOException
 	 */
-	public static void firstStoryAlice() throws IOException
+	public static void firstStoryAlice() throws JSONException, IOException
 	{
 		System.out.println("Trouver les nouvelles questions dans mes compétences :");
-		System.out.println("Veuillez saisir votre nom : ");
+		System.out.println("Veuillez saisir votre identifiant : ");
 		input = new Scanner (System.in);
-		String inname = input.nextLine();
-		inname = inname.replaceAll("\\s","%20");
-		String url = "https://api.stackexchange.com/2.2/users?order=desc&sort=reputation&inname=" + inname +"&site=stackoverflow";
-    	String jsonString = DaveHttp.sendGet(url);
-    	JSONObject obj= new JSONObject(jsonString);
-    	int userid = 0;
+		int userid = input.nextInt();
+		if (userid == 0) return;
+		String url = "https://api.stackexchange.com//2.2/users/" + userid +"/top-tags?site=stackoverflow";
+		String jsonString = DaveHttp.sendGet(url);
+		JSONObject obj= new JSONObject(jsonString);
+		JSONArray tab_tags = obj.getJSONArray("items");
+    	
     	try
     	{
-        	userid = obj.getJSONArray("items").getJSONObject(0).getInt("user_id");
+        	ArrayList<String> tags = new ArrayList<String>();
+			for (int k = 0; k<6; k++)
+			{
+				tags.add(tab_tags.getJSONObject(k).getString("tag_name"));
         	
+			}
+			String tag = new String();
+			int cpt = 0;
+			tag = tags.get(0) + ";" + tags.get(1) + ";" + tags.get(2) + ";" + tags.get(3) + ";" + tags.get(4) + ";" + tags.get(5);
+			int indice = 5;
+			while (cpt < 10){
+				String url1 = "https://api.stackexchange.com/2.2/questions/no-answers?pagesize=100&order=desc&sort=creation&tagged="+tag+"&site=stackoverflow";
+				String jsonString1 = DaveHttp.sendGet(url1);
+				JSONObject obj1= new JSONObject(jsonString1);
+				JSONArray array = obj1.getJSONArray("items");
+				if (array.length()<10){
+					int i = 0;
+					while(i<array.length() && cpt<10){
+						String titre = array.getJSONObject(i).getString("title");
+						String link = array.getJSONObject(i).getString("link");
+						System.out.println((cpt+1) + " - " + titre);
+						System.out.println("lien: " + link);
+						i++;
+						cpt++;
+					}
+					tag = tag.replace(";"+tags.get(indice), "");
+					indice--;
+				}else{
+					int i = 0;
+					while(cpt<10){
+						String titre = array.getJSONObject(i).getString("title");
+						String link = array.getJSONObject(i).getString("link");
+						System.out.println((cpt+1) + " - " + titre);
+						System.out.println("lien: " + link);
+						i++;
+						cpt++;
+					}
+				}
+			}
     	}
     	catch(JSONException j)
     	{
-    		System.out.println("Ce nom n'existe pas veuillez resaisir votre nom");
-    		input = new Scanner (System.in);
-    		inname = input.nextLine();
-    		inname = inname.replaceAll("\\s","%20");
-    		url = "https://api.stackexchange.com/2.2/users?order=desc&sort=reputation&inname=" + inname +"&site=stackoverflow";
-        	jsonString = DaveHttp.sendGet(url);
-        	obj= new JSONObject(jsonString);  
-        	userid = obj.getJSONArray("items").getJSONObject(0).getInt("user_id");
+    		System.out.println("Aucun tag n'a été touvé pour cet utilisateur");
+  
     	}
     	System.out.println(userid);
-    	String url1 = "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?site=stackoverflow";
-    	String jsonString1 = DaveHttp.sendGet(url1);
-    	JSONObject obj1= new JSONObject(jsonString1);
-    	
-    	for (int i = 0; i<6;i++)
-    	{
-    		String topTag = obj1.getJSONArray("items").getJSONObject(i).getString("tag_name");
-    		String tagUrl = topTag;
-    		System.out.println("Les nouvelles questions pour votre compétence '" + topTag + "' sont :");
-    		if(topTag.equals("c#"))
-    			tagUrl="%23";
-    		String url2 = "https://api.stackexchange.com/2.2/questions/no-answers?order=desc&sort=creation&tagged=" + tagUrl + "&site=stackoverflow";
-    		String jsonString2 = DaveHttp.sendGet(url2);
-        	JSONObject obj2= new JSONObject(jsonString2);
-        	
-        	for (int k = 0; k < 10; k++)
-        	{
-        		String titreQuestions = obj2.getJSONArray("items").getJSONObject(k).getString("title");
-        		String lienQuestions = obj2.getJSONArray("items").getJSONObject(k).getString("link");
-        		System.out.println( (k+1) + "." + titreQuestions);
-        		System.out.println(lienQuestions);
-        	}
-        	System.out.println("");
-    	}	
 	}
+	
 	
 	/***
 	 * Troisième Story d'Alice: Trier les questions auxquelles j’ai répondu en fonction de leur taux de succès
