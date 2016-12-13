@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
-import TSE.P_INFO.CosmopoliTse.DaveHttp;
+import TSE.P_INFO.CosmopoliTse.UsersStories.DaveGUI;
 
 public class DaveListener implements ActionListener {
 
@@ -36,7 +36,7 @@ public class DaveListener implements ActionListener {
 				{
 					try {
 						dave.errorArea.setVisible(false);
-						DaveHttp.firstStoryGUI(dave.subject.getText(), dave.answerArea);
+						DaveGUI.firstStoryGUI(dave.subject.getText(), dave.answerArea);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						dave.answerArea.setSelectedTextColor(Color.red);
@@ -48,7 +48,7 @@ public class DaveListener implements ActionListener {
 				{
 					try {
 						dave.errorArea.setVisible(false);
-						DaveHttp.secondStoryGUI(dave.subject.getText(),	dave.answerArea);
+						DaveGUI.secondStoryGUI(dave.subject.getText(),	dave.answerArea);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						dave.answerArea.setSelectedTextColor(Color.red);
@@ -60,7 +60,7 @@ public class DaveListener implements ActionListener {
 				{
 					 dave.errorArea.setEditable(false);
 					try {
-						StringBuilder sb = DaveHttp.thirdStoryGUI(dave.subject.getText().split(";"), dave.answerArea);
+						StringBuilder sb = DaveGUI.thirdStoryGUI(dave.subject.getText().split(";"), dave.answerArea);
 						if(sb.length()!=0)
 						{
 							dave.errorArea.setVisible(true);

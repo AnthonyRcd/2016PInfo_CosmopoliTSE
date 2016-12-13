@@ -1,19 +1,16 @@
 package TSE.P_INFO.CosmopoliTse.InterfaceGraphique;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Toolkit;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class InterfaceDave extends JPanel{
 	
 	JButton search1 = new JButton("1ère Story");

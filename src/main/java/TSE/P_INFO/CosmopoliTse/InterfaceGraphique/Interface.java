@@ -3,6 +3,7 @@ package TSE.P_INFO.CosmopoliTse.InterfaceGraphique;
 import java.awt.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class Interface extends JPanel{
 
 	JButton search3 = new JButton("Recherche");
