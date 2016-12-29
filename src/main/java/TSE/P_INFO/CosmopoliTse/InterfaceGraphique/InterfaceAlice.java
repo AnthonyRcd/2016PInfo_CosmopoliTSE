@@ -21,9 +21,7 @@ public class InterfaceAlice extends JPanel{
 	JTextField subject;
 	
 	JTextArea answerArea;
-	
-	JTextArea explanations = new JTextArea();
-	
+		
 	public InterfaceAlice(){
 		add(makePanel());
 	}
@@ -71,9 +69,8 @@ public class InterfaceAlice extends JPanel{
 		);
 		
 		answerArea = new JTextArea(); answerArea.setSize(1000, 1000); answerArea.setEditable(false); answerArea.setText("Résultat de la requête");
-		explanations.setText("Explications du fonctionnement des user stories:\n Story1: bla bla bla \n Story2: bla bla bla \n Story3: bla bla bla");
 		
-		alicePanel.add(searchPanel,BorderLayout.PAGE_START); alicePanel.add(explanations,BorderLayout.CENTER); alicePanel.add(answerArea, BorderLayout.PAGE_END);
+		alicePanel.add(searchPanel,BorderLayout.PAGE_START); alicePanel.add(answerArea, BorderLayout.PAGE_END);
 		
 		return alicePanel;
 

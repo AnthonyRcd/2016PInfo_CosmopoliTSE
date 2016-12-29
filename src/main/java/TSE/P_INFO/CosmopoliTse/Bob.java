@@ -1,25 +1,27 @@
 package TSE.P_INFO.CosmopoliTse;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
+
+import TSE.P_INFO.CosmopoliTse.UsefulMethods.Methods;
 
 public class Bob {
 	
 	private static Scanner input;
-	public static String createTagString(List<String> ll, Integer length){
-		String result = "";
-		for(int i = 0;i<length;i++){
-			result += ll.get(i);
-			result += "%3B";
-		}
-		result = result.substring(0,result.length()-3);
-		return result;
+	
+	public static String createTagString(List<String> ll, Integer length) throws UnsupportedEncodingException{
+		String result = String.join(";", ll.subList(0, length));
+		return URLEncoder.encode(result,"utf-8");
 	}
-	public static void thirdStoryBob() throws IOException{
+	
+	public static void thirdStory() throws IOException{
 		boolean continuer=false;
 		do{
 			System.out.println("Me proposer des contributeurs à suivre");
@@ -28,14 +30,14 @@ public class Bob {
 			int userid = input.nextInt();
 			List<String> toptagList = new ArrayList<String>();
 			
-			String url0 = "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?pagesize=6&site=stackoverflow";
-	    	String jsonString0 = DaveHttp.sendGet(url0);
+			String url0 = Methods.generateUserRequest(userid);
+	    	String jsonString0 = Methods.sendGet(url0);
 	    	JSONObject obj0= new JSONObject(jsonString0);
 	    	if(obj0.getJSONArray("items").length()==0){
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche ");
 	    		userid = input.nextInt();
-	    		url0 = "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?pagesize=6&site=stackoverflow";
-	        	jsonString0 = DaveHttp.sendGet(url0);
+	    		url0 = Methods.generateUserRequest(userid);
+	        	jsonString0 = Methods.sendGet(url0);
 	        	obj0 = new JSONObject(jsonString0);
 	    		continuer=true;
 	    	}
@@ -45,8 +47,8 @@ public class Bob {
 	    		}
 	    		for(String ss: toptagList){
 	    			for(int i=0;i<3;i++){
-	    				String url01 = "https://api.stackexchange.com/2.2/tags/"+ss+"/top-answerers/all_time?site=stackoverflow";
-	    		    	String jsonString01 = DaveHttp.sendGet(url01);
+	    				String url01 = Methods.generateTagRequest(ss);
+	    		    	String jsonString01 = Methods.sendGet(url01);
 	    		    	JSONObject obj01 = new JSONObject(jsonString01);
 	    				System.out.println(obj01.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name"));
 	    			}
@@ -55,7 +57,7 @@ public class Bob {
 		}	
 		while(continuer);
 	}
-	public static void fourthStoryBob() throws IOException
+	public static void fourthStory() throws IOException
 	{
 		boolean continuer=false;
     	do{
@@ -67,15 +69,15 @@ public class Bob {
 			int length = 6;
 			List<String> toptagList = new ArrayList<String>();
 			
-	    	String url1 = "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?pagesize=6&site=stackoverflow";
-	    	String jsonString1 = DaveHttp.sendGet(url1);
+	    	String url1 = Methods.generateUserRequest(userid);
+	    	String jsonString1 = Methods.sendGet(url1);
 	    	JSONObject obj1= new JSONObject(jsonString1);
 	    	System.out.println("Les les nouvelles 10 question: ");
 	    	if(obj1.getJSONArray("items").length()==0){
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche ");
 	    		userid = input.nextInt();
-	    		url1 = "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?pagesize=6&site=stackoverflow";
-	        	jsonString1 = DaveHttp.sendGet(url1);
+	    		url1 = Methods.generateUserRequest(userid);
+	        	jsonString1 = Methods.sendGet(url1);
 	        	obj1 = new JSONObject(jsonString1);
 	    		continuer=true;	
 	    	}
@@ -85,12 +87,12 @@ public class Bob {
 	    		}
 	    		while(flag>0){
 		    		String url2 = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged="+createTagString(toptagList,length)+"&site=stackoverflow";
-			    	String jsonString2 = DaveHttp.sendGet(url2);
+			    	String jsonString2 = Methods.sendGet(url2);
 			    	JSONObject obj2= new JSONObject(jsonString2);
 			    	if(obj2.getJSONArray("items").length()==0){
 			    		length--;
 			    		url2 = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged="+createTagString(toptagList,length)+"&site=stackoverflow";
-				    	jsonString2 = DaveHttp.sendGet(url2);
+				    	jsonString2 = Methods.sendGet(url2);
 				    	obj2 = new JSONObject(jsonString2);
 			    	}
 			    	else{
@@ -101,7 +103,7 @@ public class Bob {
 			    				//System.out.println(createTagString(toptagList,length));
 			    				String title = obj2.getJSONArray("items").getJSONObject(n).getString("title");
 			    				String link = obj2.getJSONArray("items").getJSONObject(n).getString("link");
-			    				System.out.println(title);
+			    				System.out.println(StringEscapeUtils.unescapeHtml4(title));
 			    				System.out.println(link);
 			    			}
 			    		}
@@ -112,7 +114,7 @@ public class Bob {
     	while(continuer);
 	}
 	public static void main(String[] args) throws IOException {
-		thirdStoryBob();
+		fourthStory();
 	}
 
 }

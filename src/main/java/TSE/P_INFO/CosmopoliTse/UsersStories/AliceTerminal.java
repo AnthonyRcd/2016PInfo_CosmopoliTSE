@@ -1,6 +1,8 @@
 package TSE.P_INFO.CosmopoliTse.UsersStories;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -88,7 +90,7 @@ public class AliceTerminal extends User{
 		input = new Scanner (System.in);
 		int userid = input.nextInt();
 		if (userid == 0) return;
-		String url = "https://api.stackexchange.com/2.2/users/" + userid +"/top-tags?site=stackoverflow";
+		String url = Methods.generateUserRequest(userid);
 		JSONObject obj= Methods.generateJSONObject(url);
 		JSONArray tab_tags = obj.getJSONArray("items");
 		String titre = new String();
@@ -102,18 +104,20 @@ public class AliceTerminal extends User{
 				tags.add(tab_tags.getJSONObject(k).getString("tag_name"));
         	
 			}
-			String tag = new String();
+			String tag = String.join(";",tags.subList(0, 5));
 			int cpt = 0;
-			tag = tags.get(0) + ";" + tags.get(1) + ";" + tags.get(2) + ";" + tags.get(3) + ";" + tags.get(4) + ";" + tags.get(5);
 			int indice = 5;
+			String[] answer;
 			while (cpt < 10){
-				url = "https://api.stackexchange.com/2.2/questions/no-answers?pagesize=100&order=desc&sort=creation&tagged="+tag+"&site=stackoverflow";
+				url = "https://api.stackexchange.com/2.2/questions/no-answers?pagesize=100&order=desc&sort=creation&tagged="+URLEncoder.encode(tag, "utf-8")+"&site=stackoverflow";
 				obj= Methods.generateJSONObject(url);
 				JSONArray array = obj.getJSONArray("items");
 				if (array.length()<10){
 					int i = 0;
 					while(i<array.length() && cpt<10){
-						Methods.generateQuestionAndLink(array, cpt, i, titre, link);
+						answer=Methods.generateQuestionAndLink(array, i, titre, link);
+						System.out.println((cpt+1) + " - " + StringEscapeUtils.unescapeHtml4(answer[0]));
+						System.out.println("lien: " + answer[1]);
 						i++;
 						cpt++;
 					}
@@ -122,16 +126,19 @@ public class AliceTerminal extends User{
 				}else{
 					int i = 0;
 					while(cpt<10){
-						Methods.generateQuestionAndLink(array, cpt, i, titre, link);
+						answer = Methods.generateQuestionAndLink(array, i, titre, link);
+						System.out.println((cpt+1) + " - " + StringEscapeUtils.unescapeHtml4(answer[0]));
+						System.out.println("lien: " + answer[1]);
 						i++;
 						cpt++;
+
 					}
 				}
 			}
     	}
     	catch(JSONException j)
     	{
-    		System.out.println("Aucun tag n'a été touvé pour cet utilisateur");
+    		System.out.println("Aucun tag n'a été trouvé pour cet utilisateur");
   
     	}
     	System.out.println(userid);
@@ -163,13 +170,13 @@ public class AliceTerminal extends User{
     		
     		userid = input.nextInt();
     		page=1;
-        	obj = Methods.generateJSONObject(Methods.answersRequestURL(userid, page));
+        	obj = Methods.generateJSONObject(Methods.generateAnswerRequest(userid, page));
         	
 	    	if(obj.getJSONArray("items").length()==0){
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche \n");
 	    		userid = input.nextInt();
 	    		page=1;
-	        	obj = Methods.generateJSONObject(Methods.answersRequestURL(userid, page));
+	        	obj = Methods.generateJSONObject(Methods.generateAnswerRequest(userid, page));
 	    		continuer=true;
 	    	}
 	    	else{
@@ -179,7 +186,7 @@ public class AliceTerminal extends User{
 		    	boolean has_more = obj.getBoolean("has_more");
 		    	if(has_more){
 		    		page++;
-		        	String jsonString1 = Methods.sendGet(Methods.answersRequestURL(userid, page));
+		        	String jsonString1 = Methods.sendGet(Methods.generateAnswerRequest(userid, page));
 		        	obj = new JSONObject(jsonString1);  
 		        	
 		        	int pageSize = obj.getJSONArray("items").length();
@@ -195,7 +202,7 @@ public class AliceTerminal extends User{
 		    	}
 		    	System.out.println("Les Top 20 Question:");
 		    	for(String questionname: questionNameList){
-		    		System.out.println(questionname);
+		    		System.out.println(StringEscapeUtils.unescapeHtml4(questionname));
 		    	}
 	    	}
 	    	questionIdList.clear();

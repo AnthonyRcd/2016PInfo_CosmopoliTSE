@@ -28,11 +28,11 @@ public class DaveTerminal extends User {
 		String tag = input.nextLine();
 		System.out.println("Combien de contributeurs voulez-vous afficher? (20 max)");
 		int count=input.nextInt();
-		String url = "https://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time?page=1&pagesize="+20+"&site=stackoverflow";
+		String url = Methods.generateTagRequest(tag);
 		String jsonString = Methods.sendGet(url);
 		JSONObject obj= new JSONObject(jsonString);
 		if(obj.getJSONArray("items").length()==0){
-    		System.out.println("Tag "+tag+" pas trouver, veuillez refaire cette recherche");
+    		System.out.println("Tag "+ tag +" pas trouver, veuillez refaire cette recherche");
     	}
 		else{
 			Map<String,Long> contributors = new HashMap<String,Long>();
@@ -58,14 +58,14 @@ public class DaveTerminal extends User {
     public void secondStory() throws IOException{
     	System.out.println("Pour quel sujet souhaitez-vous effectuer la recherche?");
     	String Tag = input.next();
-    	String url = "https://api.stackexchange.com/2.2/tags/" + Tag + "/top-answerers/all_time?page=1&pagesize=1&site=stackoverflow";
+    	String url = Methods.generateTagRequest(Tag);
     	String jsonString = Methods.sendGet(url);
     	JSONObject obj= new JSONObject(jsonString);  
     	if(obj.getJSONArray("items").length()==0){
     		System.out.println("Tag "+Tag+" pas trouver, veuillez refaire cette recherche");
     	}
     	else{
-    		String tagTopAnswerer= Methods.getUserName(obj,0);
+    		String tagTopAnswerer= Methods.getUserProperty(obj,0,"display_name");
     		System.out.println("L'utilisateur ayant le Top Tag dans le sujet " + Tag + " est : " + tagTopAnswerer);
     	}
     }
@@ -93,7 +93,7 @@ public class DaveTerminal extends User {
    	}
    	
    	for(String tt:tagList){
-   		String url = "https://api.stackexchange.com/2.2/tags/" + tt + "/top-answerers/all_time?site=stackoverflow";
+   		String url = Methods.generateTagRequest(tt);
        	String jsonString = Methods.sendGet(url);
        	JSONObject obj= new JSONObject(jsonString); 
        	if(obj.getJSONArray("items").length()==0)
@@ -105,7 +105,7 @@ public class DaveTerminal extends User {
        	{
 	    	for(int j=0;j<20;j++){
 	    		int flag=0;
-	    		String nom = Methods.getUserName(obj, j);
+	    		String nom = Methods.getUserProperty(obj, j,"display_name");
 	    		Long post= obj.getJSONArray("items").getJSONObject(j).getLong("post_count");
 	    		for (Map.Entry<String, Long> entry : userScoreMap.entrySet())
 	    		{
