@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
@@ -20,6 +22,14 @@ public class Bob {
 		String result = String.join(";", ll.subList(0, length));
 		return URLEncoder.encode(result,"utf-8");
 	}
+	public static String createAfficheTag(List<String> ll, Integer length){
+		String result = "Top tags: ";
+		for(String l:ll){
+			result += l+" et ";
+		}
+		result = result.substring(0,result.length()-3);
+		return result;
+	}
 	
 	public static void thirdStory() throws IOException{
 		boolean continuer=false;
@@ -29,7 +39,7 @@ public class Bob {
 			input = new Scanner (System.in);
 			int userid = input.nextInt();
 			List<String> toptagList = new ArrayList<String>();
-			
+			Set<String> noms = new HashSet<String>();
 			String url0 = Methods.generateUserRequest(userid);
 	    	String jsonString0 = Methods.sendGet(url0);
 	    	JSONObject obj0= new JSONObject(jsonString0);
@@ -50,9 +60,11 @@ public class Bob {
 	    				String url01 = Methods.generateTagRequest(ss);
 	    		    	String jsonString01 = Methods.sendGet(url01);
 	    		    	JSONObject obj01 = new JSONObject(jsonString01);
-	    				System.out.println(obj01.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name"));
+	    				//System.out.println(obj01.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name"));
+	    		    	noms.add(obj01.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name"));
 	    			}
 	    		}
+	    		System.out.println(noms);
 	    	}
 		}	
 		while(continuer);
@@ -96,17 +108,17 @@ public class Bob {
 				    	obj2 = new JSONObject(jsonString2);
 			    	}
 			    	else{
-			    		length--;
 			    		for(int n=0;n<obj2.getJSONArray("items").length();n++){
 			    			if(obj2.getJSONArray("items").getJSONObject(n).getBoolean("is_answered")==true&&flag>0){
 			    				flag--;
-			    				//System.out.println(createTagString(toptagList,length));
+			    				System.out.println(createAfficheTag(toptagList,length));
 			    				String title = obj2.getJSONArray("items").getJSONObject(n).getString("title");
 			    				String link = obj2.getJSONArray("items").getJSONObject(n).getString("link");
 			    				System.out.println(StringEscapeUtils.unescapeHtml4(title));
 			    				System.out.println(link);
 			    			}
 			    		}
+			    		length--;
 			    	}
 	    		}
 	    	}
@@ -114,7 +126,11 @@ public class Bob {
     	while(continuer);
 	}
 	public static void main(String[] args) throws IOException {
-		fourthStory();
+
+		//fourthStory();
+
+		thirdStory();
+
 	}
 
 }
