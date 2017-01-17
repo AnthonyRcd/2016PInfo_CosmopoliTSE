@@ -157,7 +157,7 @@ public class DaveGUI{
     	answerArea.setText(answer.toString());
     }
     
-    /*------Test version JList------*/
+    /*------Version JList------*/
     
     //TODO Javadoc
     public static synchronized Vector<URI> firstStoryGUI(String tag, JList<String> answerJList, JTextArea errorArea){
@@ -190,8 +190,7 @@ public class DaveGUI{
 		}catch(Exception e){
 			errorArea.setVisible(true);
 			errorArea.setText("Veuillez saisir un tag correct");
-			if(e.getClass().equals(JSONException.class))
-				System.err.println(e);
+			System.err.println(e);
 		}
 		
 		answerJList.setListData(answerList); answerJList.setLayoutOrientation(JList.VERTICAL);
@@ -213,8 +212,7 @@ public class DaveGUI{
     	answers[1] = tagTopAnswerer;
     	answerList.setListData(answers); answerList.setVisibleRowCount(1); answerList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
     	}catch(Exception e){
-    		if(!e.getClass().equals(IOException.class))
-    			System.err.println(e);
+   			System.err.println(e);
     		errorArea.setVisible(true);
     		errorArea.setText("Veuillez saisir un tag correct");
     	}
@@ -250,7 +248,7 @@ public class DaveGUI{
 			} catch (Exception e) {
 				errorArea.setVisible(true);
 				errorArea.setText("Veuillez saisir un tag correct");
-				if (!e.getClass().equals(IOException.class)) System.err.println(e);
+				System.err.println(e);
 				return null;
 			}
 			
