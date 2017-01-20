@@ -10,6 +10,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import TSE.P_INFO.CosmopoliTse.UsefulMethods.Methods;
@@ -29,6 +30,49 @@ public class Bob {
 		}
 		result = result.substring(0,result.length()-3);
 		return result;
+	}
+	public static void firstStory() throws IOException
+	{
+		System.out.println("M’aider à trouver des questions existantes qui correspondent à mon besoin");
+		System.out.println("Veuillez saisir une question : ");
+		input= new Scanner(System.in);
+		String question = input.nextLine();
+		question = question.replaceAll("\\s","%20");
+		String url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
+		JSONObject obj = Methods.generateJSONObject(url);
+		String relatedQuestions ;
+		try
+    	{
+        	relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
+    	}
+		catch(JSONException j)
+    	{
+    		System.out.println("Aucune correspondance trouvée, veuillez resaisir une question");
+    		input = new Scanner (System.in);
+    		question = input.nextLine();
+    		url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
+    		obj = Methods.generateJSONObject(url);
+    		relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
+    	}
+    	System.out.println(relatedQuestions);
+    	
+    	for (int i = 0; i < 10 ;i++)
+    	{
+    		url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
+        	obj= Methods.generateJSONObject(url);
+        	relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
+    		System.out.println("Les questions correspondants à votre besoin '" + relatedQuestions + "' sont :");
+        	
+        	for (int k = 0; k < 10; k++)
+        	{
+        		String titreQuestions = obj.getJSONArray("items").getJSONObject(k).getString("title");
+        		String lienQuestions = obj.getJSONArray("items").getJSONObject(k).getString("link");
+        		System.out.println( (k+1) + "." + titreQuestions);
+        		System.out.println(lienQuestions);
+        	}
+        	System.out.println("");
+    	}
+		
 	}
 	
 	public static void thirdStory() throws IOException{
@@ -128,7 +172,7 @@ public class Bob {
 	public static void main(String[] args) throws IOException {
 
 		//fourthStory();
-
+		firstStory();
 		thirdStory();
 
 	}
