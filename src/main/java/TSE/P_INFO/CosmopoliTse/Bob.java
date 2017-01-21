@@ -54,7 +54,6 @@ public class Bob {
     		obj = Methods.generateJSONObject(url);
     		relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
     	}
-    	System.out.println(relatedQuestions);
     	
     	url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
         obj= Methods.generateJSONObject(url);
@@ -65,7 +64,6 @@ public class Bob {
         	{
         		String titreQuestions = obj.getJSONArray("items").getJSONObject(k).getString("title");
         		String lienQuestions = obj.getJSONArray("items").getJSONObject(k).getString("link");
-        		//System.out.println( (k+1) + "." + titreQuestions);
         		System.out.println((k+1) + "." + StringEscapeUtils.unescapeHtml4(titreQuestions));
         		System.out.println(lienQuestions);
         	}
