@@ -58,7 +58,7 @@ public class Bob {
     	url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
         obj= Methods.generateJSONObject(url);
         relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
-    	System.out.println("Les questions correspondants à votre besoin '" + relatedQuestions + "' sont :");
+    	System.out.println("Les questions correspondants à votre besoin sont :");
         	
         	for (int k = 0; k < 10; k++)
         	{
@@ -69,6 +69,12 @@ public class Bob {
         	}
         	System.out.println("");
     	}
+	public static void secondStory() throws IOException
+	{
+		System.out.println("Me suggérer des mots-clés à rajouter");
+		System.out.println("Veuillez saisir votre recherche : ");
+		
+	}
 	
 	public static void thirdStory() throws IOException{
 		boolean continuer=false;
