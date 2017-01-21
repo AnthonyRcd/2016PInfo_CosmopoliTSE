@@ -65,7 +65,8 @@ public class Bob {
         	{
         		String titreQuestions = obj.getJSONArray("items").getJSONObject(k).getString("title");
         		String lienQuestions = obj.getJSONArray("items").getJSONObject(k).getString("link");
-        		System.out.println( (k+1) + "." + titreQuestions);
+        		//System.out.println( (k+1) + "." + titreQuestions);
+        		System.out.println((k+1) + "." + StringEscapeUtils.unescapeHtml4(titreQuestions));
         		System.out.println(lienQuestions);
         	}
         	System.out.println("");
@@ -169,7 +170,7 @@ public class Bob {
 
 		//fourthStory();
 		firstStory();
-		thirdStory();
+		//thirdStory();
 
 	}
 
