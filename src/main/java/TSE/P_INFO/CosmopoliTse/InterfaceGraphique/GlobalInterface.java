@@ -1,16 +1,24 @@
 package TSE.P_INFO.CosmopoliTse.InterfaceGraphique;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
-public class Interface extends JPanel{
+public class GlobalInterface extends JPanel{
 
-	public Interface(){
+	static JFrame frame ;
+	static JTabbedPane tabbedPane;
+	public GlobalInterface(){
 		
 		super(new GridLayout(1, 1));
 		
-		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane = new JTabbedPane();
 		JScrollPane scrollPane = new JScrollPane(tabbedPane);
 	
 		DaveListener daveL = new DaveListener();
@@ -30,15 +38,34 @@ public class Interface extends JPanel{
 		add(scrollPane);
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
+		tabbedPane.addChangeListener(new Listener());
+		
 	}
-			
+		
+	public class Listener implements ChangeListener{
+		@Override
+		public void stateChanged(ChangeEvent arg0) {
+			frame.setTitle("Projet Info CosmopoliTSE - " + tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()));
+		}
+		
+	}
+	
 	private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("Projet Info CosmopoliTSE");
+
+		BufferedImage icone = null;
+		try {
+		    icone = ImageIO.read(GlobalInterface.class.getResource("stackoverflow.png"));
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+		
+		frame = new JFrame("Projet Info CosmopoliTSE - Dave");
+        frame.setIconImage(icone);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Add content to the window.
-        frame.add(new Interface(), BorderLayout.CENTER);
+        frame.add(new GlobalInterface(), BorderLayout.CENTER);
         
         //Display the window.
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

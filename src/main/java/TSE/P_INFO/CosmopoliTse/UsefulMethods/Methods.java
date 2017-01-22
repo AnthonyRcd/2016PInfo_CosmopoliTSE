@@ -12,8 +12,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Methods{
@@ -48,7 +51,7 @@ public class Methods{
 	 * @return renvoie les données récupérées sur le site (compressées au format GZIP) sous la forme d'une String
 	 * @see uncompress
 	 ***/
-	public static String sendGet(String url) throws IOException{
+	public static String sendGet(String url) throws IOException, ZipException{
         String result = "";
         try {
         	URL realUrl = new URL(url);
@@ -61,7 +64,7 @@ public class Methods{
    		 	in.close();
    		 	return result;            
         } catch (Exception e) {
-            System.err.println(e);//System.out.println(result);
+            System.err.println(e);
             throw e;
         }
     }
@@ -130,7 +133,14 @@ public class Methods{
 	 * @return Une String contenant le nom de l'utilisateur souhaité
 	 */
 	public static String getUserProperty(JSONObject obj, int index, String prop){
-		return obj.getJSONArray("items").getJSONObject(index).getJSONObject("user").getString(prop);
+		String property = "";
+		try{
+			property = obj.getJSONArray("items").getJSONObject(index).getJSONObject("user").getString(prop);
+		}catch(JSONException e){
+			System.err.println(e);
+		}
+		
+		return property;
 	}
 	
 	
@@ -140,7 +150,7 @@ public class Methods{
 	 * @param index - Index de la question dont on souhaite l'identifiant dans le tableau "items" contenu dans l'objet JSON
 	 * @return Un entier contenant l'identifiant de la question souhaitée
 	 */
-	public static int getQuestionId(JSONObject obj, int index){
+	public static Integer getQuestionId(JSONObject obj, int index){
 		return obj.getJSONArray("items").getJSONObject(index).getInt("question_id");
 	}
 	
@@ -152,8 +162,13 @@ public class Methods{
 	 * @throws IOException
 	 * @see sendGet
 	 */
-	public static JSONObject generateJSONObject(String url) throws IOException{
-		return new JSONObject(Methods.sendGet((url)));
+	public static JSONObject generateJSONObject(String url){
+		try {
+			return new JSONObject(Methods.sendGet((url)));
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+		return null;
 	}
 	
 	
@@ -167,7 +182,7 @@ public class Methods{
 	 */
 	public static String[] generateQuestionAndLink(JSONArray array, int index, String title, String link){
 		String[] answer = new String[2];
-		title = array.getJSONObject(index).getString("title");
+		title = StringEscapeUtils.unescapeHtml4(array.getJSONObject(index).getString("title"));
 		answer[0]=title;
 		link = array.getJSONObject(index).getString("link");
 		answer[1]=link;
@@ -183,7 +198,7 @@ public class Methods{
 	 */
 	public static String generateAnswerRequest(int userid, int page)
 	{
-		return "https://api.stackexchange.com/2.2/users/" + userid + "/answers?page="+ page +"&pagesize=10&order=desc&sort=votes&site=stackoverflow";
+		return "https://api.stackexchange.com/2.2/users/" + userid + "/answers?page="+ page +"&pagesize=20&order=desc&sort=votes&site=stackoverflow";
 	}
 	
 	
@@ -192,7 +207,7 @@ public class Methods{
 	 * @param userid - Identifiant de l'utilisateur
 	 * @return Une String contenant l'url pour laquelle on effectuera la requête HTTP
 	 */
-	public static String generateUserRequest(int userid) {
+	public static String generateTopTagsRequest(int userid) {
 		return "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?pagesize=6&site=stackoverflow";
 	}
 
@@ -238,5 +253,9 @@ public class Methods{
 		}
 	}
 
+	@SuppressWarnings("serial")
+	public static class BadIdException extends Exception{
+		
+	}
 	
 }

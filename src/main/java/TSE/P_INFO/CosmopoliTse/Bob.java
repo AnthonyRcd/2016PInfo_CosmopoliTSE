@@ -91,7 +91,7 @@ public class Bob {
 	    	if(obj0.getJSONArray("items").length()==0){
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche ");
 	    		userid = input.nextInt();
-	    		url0 = Methods.generateUserRequest(userid);
+	    		url0 = Methods.generateTopTagsRequest(userid);
 	        	jsonString0 = Methods.sendGet(url0);
 	        	obj0 = new JSONObject(jsonString0);
 	    		continuer=true;
@@ -126,14 +126,14 @@ public class Bob {
 			int length = 6;
 			List<String> toptagList = new ArrayList<String>();
 			
-	    	String url1 = Methods.generateUserRequest(userid);
+	    	String url1 = Methods.generateTopTagsRequest(userid);
 	    	String jsonString1 = Methods.sendGet(url1);
 	    	JSONObject obj1= new JSONObject(jsonString1);
 	    	System.out.println("Les les nouvelles 10 question: ");
 	    	if(obj1.getJSONArray("items").length()==0){
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche ");
 	    		userid = input.nextInt();
-	    		url1 = Methods.generateUserRequest(userid);
+	    		url1 = Methods.generateTopTagsRequest(userid);
 	        	jsonString1 = Methods.sendGet(url1);
 	        	obj1 = new JSONObject(jsonString1);
 	    		continuer=true;	

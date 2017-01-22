@@ -14,10 +14,11 @@ import java.net.URISyntaxException;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JTextField;
 
 import TSE.P_INFO.CosmopoliTse.UsersStories.DaveGUI;
 
-public class DaveListener implements ActionListener, FocusListener, MouseListener{
+public class DaveListener implements ActionListener, FocusListener, MouseListener {
 
 	InterfaceDave dave = new InterfaceDave();
 	Vector<URI> links = new Vector<URI>();
@@ -26,7 +27,7 @@ public class DaveListener implements ActionListener, FocusListener, MouseListene
 		actionsDave();
 	}
 
-	//Addition of the listener on each button
+	//Addition of the listener on each button and on the list
 	public void actionsDave(){
 		
 		dave.search1.addActionListener(this);
@@ -71,10 +72,13 @@ public class DaveListener implements ActionListener, FocusListener, MouseListene
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		dave.subject.setForeground(Color.BLACK);
-		if(dave.subject.getText().equals("ex: java (Story1) ou java;sql;c#;javascript (Story3)"))
-			dave.subject.setText("");
-		
+		if (e.getSource() instanceof JTextField)
+		{
+			JTextField source = (JTextField) e.getSource();
+			source.setForeground(Color.BLACK);
+			if(source.getText().equals("ex: java (Story1) ou java;sql;c#;javascript (Story3)"))
+				source.setText("");
+		}		
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class DaveListener implements ActionListener, FocusListener, MouseListene
 		try {
 			if(user!=0) Desktop.getDesktop().browse(links.get(user-1));
         } catch (IOException ex) {
-            System.out.println("It looks like there's a problem");
+            System.err.println("It looks like there's a problem");
         }
 	}
 
