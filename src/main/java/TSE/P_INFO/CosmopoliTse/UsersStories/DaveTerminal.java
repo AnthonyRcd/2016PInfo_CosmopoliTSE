@@ -148,6 +148,11 @@ public class DaveTerminal extends User {
 	public void setUsername(String name) {
 		this.username=name;
 	}
+	@Override
+	public void fourthStory() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

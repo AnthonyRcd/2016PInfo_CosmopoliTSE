@@ -1,4 +1,4 @@
-package TSE.P_INFO.CosmopoliTse;
+package TSE.P_INFO.CosmopoliTse.UsersStories;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -14,33 +14,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import TSE.P_INFO.CosmopoliTse.UsefulMethods.Methods;
+import TSE.P_INFO.CosmopoliTse.UsefulMethods.User;
 
-public class Bob {
+public class BobTerminal extends User {
 	
-	private static Scanner input;
+	BobTerminal(){
+		setUsername("Bob");
+	}
 	
-	public static String createTagString(List<String> ll, Integer length) throws UnsupportedEncodingException{
-		String result = String.join(";", ll.subList(0, length));
-		return URLEncoder.encode(result,"utf-8");
-	}
-	public static String createAfficheTag(List<String> ll, Integer length){
-		String result = "Top tags: ";
-		for(String l:ll){
-			result += l+" et ";
-		}
-		result = result.substring(0,result.length()-3);
-		return result;
-	}
-	public static void firstStory() throws IOException
+	/***
+	 * 
+	 */
+	@Override
+	public void firstStory() throws IOException
 	{
-		System.out.println("M’aider à trouver des questions existantes qui correspondent à mon besoin");
 		System.out.println("Veuillez saisir une question : ");
-		input= new Scanner(System.in);
+		input = new Scanner(System.in);
 		String question = input.nextLine();
-		question = question.replaceAll("\\s","%20");
-		String url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
+		String url = "https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=" + URLEncoder.encode(question,"utf-8") + "&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
 		JSONObject obj = Methods.generateJSONObject(url);
-		String relatedQuestions ;
+		String relatedQuestions;
 		try
     	{
         	relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
@@ -48,14 +41,13 @@ public class Bob {
 		catch(JSONException j)
     	{
     		System.out.println("Aucune correspondance trouvée, veuillez resaisir une question");
-    		input = new Scanner (System.in);
     		question = input.nextLine();
-    		url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
+    		url = "https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=" + URLEncoder.encode(question,"utf-8") + "&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
     		obj = Methods.generateJSONObject(url);
     		relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
     	}
     	
-    	url = "https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=" + question + "&site=stackoverflow";
+    	url = "https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=" + URLEncoder.encode(question,"utf-8") + "&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
         obj= Methods.generateJSONObject(url);
         relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
     	System.out.println("Les questions correspondants à votre besoin sont :");
@@ -69,31 +61,38 @@ public class Bob {
         	}
         	System.out.println("");
     	}
-	public static void secondStory() throws IOException
+	
+	
+	@Override
+	public void secondStory() throws IOException
 	{
-		System.out.println("Me suggérer des mots-clés à rajouter");
 		System.out.println("Veuillez saisir votre recherche : ");
-		
+		try{
+			input = new Scanner(System.in);
+			String question = input.nextLine();
+			System.out.println(Methods.Comparaison(Methods.RecupérationMotQuestion(question)));
+		}
+		 catch (JSONException j) {
+			System.out.println("Erreur");
+		}
 	}
 	
-	public static void thirdStory() throws IOException{
+	@Override
+	public void thirdStory() throws IOException{
 		boolean continuer=false;
 		do{
-			System.out.println("Me proposer des contributeurs à suivre");
 			System.out.println("Veuillez saisir un userid : ");
 			input = new Scanner (System.in);
 			int userid = input.nextInt();
 			List<String> toptagList = new ArrayList<String>();
 			Set<String> noms = new HashSet<String>();
 			String url0 = Methods.generateTopTagsRequest(userid);
-	    	String jsonString0 = Methods.sendGet(url0);
-	    	JSONObject obj0= new JSONObject(jsonString0);
+	    	JSONObject obj0= Methods.generateJSONObject(url0);
 	    	if(obj0.getJSONArray("items").length()==0){
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche ");
 	    		userid = input.nextInt();
 	    		url0 = Methods.generateTopTagsRequest(userid);
-	        	jsonString0 = Methods.sendGet(url0);
-	        	obj0 = new JSONObject(jsonString0);
+	        	obj0 = Methods.generateJSONObject(url0);
 	    		continuer=true;
 	    	}
 	    	else{
@@ -103,9 +102,7 @@ public class Bob {
 	    		for(String ss: toptagList){
 	    			for(int i=0;i<3;i++){
 	    				String url01 = Methods.generateTagRequest(ss);
-	    		    	String jsonString01 = Methods.sendGet(url01);
-	    		    	JSONObject obj01 = new JSONObject(jsonString01);
-	    				//System.out.println(obj01.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name"));
+	    		    	JSONObject obj01 = Methods.generateJSONObject(url01);
 	    		    	noms.add(obj01.getJSONArray("items").getJSONObject(i).getJSONObject("user").getString("display_name"));
 	    			}
 	    		}
@@ -114,11 +111,12 @@ public class Bob {
 		}	
 		while(continuer);
 	}
-	public static void fourthStory() throws IOException
+	
+	
+	public void fourthStory() throws IOException
 	{
 		boolean continuer=false;
     	do{
-			System.out.println("M’indiquer les nouvelles questions (avec déjà des réponses) dans mes champs d’intérêt");
 			System.out.println("Veuillez saisir un userid : ");
 			input = new Scanner (System.in);
 			int userid = input.nextInt();
@@ -134,8 +132,7 @@ public class Bob {
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche ");
 	    		userid = input.nextInt();
 	    		url1 = Methods.generateTopTagsRequest(userid);
-	        	jsonString1 = Methods.sendGet(url1);
-	        	obj1 = new JSONObject(jsonString1);
+	        	obj1 = Methods.generateJSONObject(url1);
 	    		continuer=true;	
 	    	}
 	    	else{
@@ -143,20 +140,18 @@ public class Bob {
 	    			toptagList.add(obj1.getJSONArray("items").getJSONObject(j).getString("tag_name"));
 	    		}
 	    		while(flag>0){
-		    		String url2 = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged="+createTagString(toptagList,length)+"&site=stackoverflow";
-			    	String jsonString2 = Methods.sendGet(url2);
-			    	JSONObject obj2= new JSONObject(jsonString2);
+		    		String url2 = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged="+ Methods.createTagString(toptagList,length)+"&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
+			    	JSONObject obj2 = Methods.generateJSONObject(url2);
 			    	if(obj2.getJSONArray("items").length()==0){
 			    		length--;
-			    		url2 = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged="+createTagString(toptagList,length)+"&site=stackoverflow";
-				    	jsonString2 = Methods.sendGet(url2);
-				    	obj2 = new JSONObject(jsonString2);
+			    		url2 = "https://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged="+ Methods.createTagString(toptagList,length)+"&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
+				    	obj2 = Methods.generateJSONObject(url2);
 			    	}
 			    	else{
 			    		for(int n=0;n<obj2.getJSONArray("items").length();n++){
 			    			if(obj2.getJSONArray("items").getJSONObject(n).getBoolean("is_answered")==true&&flag>0){
 			    				flag--;
-			    				System.out.println(createAfficheTag(toptagList,length));
+			    				System.out.println(Methods.afficheTag(toptagList,length));
 			    				String title = obj2.getJSONArray("items").getJSONObject(n).getString("title");
 			    				String link = obj2.getJSONArray("items").getJSONObject(n).getString("link");
 			    				System.out.println(StringEscapeUtils.unescapeHtml4(title));
@@ -170,12 +165,17 @@ public class Bob {
 		}
     	while(continuer);
 	}
+	
 	public static void main(String[] args) throws IOException {
 
-		//fourthStory();
-		firstStory();
-		//thirdStory();
+		menu(new BobTerminal());
 
+	}
+	
+	@Override
+	public void setUsername(String name) {
+		username = name;
+		
 	}
 
 }

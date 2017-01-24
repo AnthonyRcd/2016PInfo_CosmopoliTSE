@@ -8,7 +8,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -220,7 +222,7 @@ public class Methods{
 	 */
 	public static String generateTagRequest(String tag) {
 		try{
-			return "https://api.stackexchange.com/2.2/tags/" + URLEncoder.encode(tag, "utf-8") + "/top-answerers/all_time?page=1&site=stackoverflow";
+			return "https://api.stackexchange.com/2.2/tags/" + URLEncoder.encode(tag, "utf-8") + "/top-answerers/all_time?page=1&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
 		}catch(UnsupportedEncodingException uee){
 			return "https://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time?page=1&site=stackoverflow";
 		}
@@ -258,4 +260,58 @@ public class Methods{
 		
 	}
 	
+	public static String createTagString(List<String> ll, Integer length) throws UnsupportedEncodingException{
+		String result = String.join(";", ll.subList(0, length));
+		return URLEncoder.encode(result,"utf-8");
+	}
+	
+	public static String afficheTag(List<String> ll, Integer length){
+		String result = "Top tags: ";
+		for(String l:ll){
+			result += l+" et ";
+		}
+		result = result.substring(0,result.length()-3);
+		return result;
+	}
+	
+	public static HashMap <String, Integer> RecupérationMotQuestion(String Question) throws JSONException{
+		
+	    int firstChar = -1;
+	    int length = 0;
+	    HashMap <String, Integer> MapMot = new HashMap<String,Integer>();
+	    for(int i=0 ; i<Question.length() ; i++) {
+	        if(!Character.isLetter(Question.charAt(i))){
+	            if(firstChar != -1)
+	                MapMot.put((Question.substring(firstChar,firstChar + length)), i);
+	            firstChar = -1;
+	            length = 0;
+	        } else {
+	            if(firstChar == -1)
+	                firstChar = i;
+	            length++;
+	        }
+	        if(firstChar != -1 && i == Question.length()-1)
+	        	MapMot.put(Question.substring(firstChar,firstChar + length),i);
+	    }
+		return MapMot;
+	}
+	
+	
+	public static ArrayList<String> Comparaison( Map<String, Integer> MapMot) throws IOException{
+		ArrayList<String> ListeMotClef = new ArrayList<String>();
+	
+		for (String e : MapMot.keySet()){
+			String urlRelatedTag = "https://api.stackexchange.com/2.2/tags/"+ e + "/related?site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
+			JSONObject RelatedTags = Methods.generateJSONObject(urlRelatedTag);
+			JSONArray TagsArrayRelated = RelatedTags.getJSONArray("items");
+			if(TagsArrayRelated.length()!=0)
+				for (int i= 1; i<6; i++)
+					ListeMotClef.add(TagsArrayRelated.getJSONObject(i).getString("name"));
+		}
+		
+		if (ListeMotClef.isEmpty())
+			System.out.println("Pas de mot clef à ajouter");
+		
+		return ListeMotClef;
+	}
 }

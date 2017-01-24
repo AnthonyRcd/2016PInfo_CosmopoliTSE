@@ -15,7 +15,6 @@ import TSE.P_INFO.CosmopoliTse.UsefulMethods.Methods;
 import TSE.P_INFO.CosmopoliTse.UsefulMethods.User;
 
 public class AliceTerminal extends User{
-	private static Scanner input = new Scanner(System.in);
 	
 	AliceTerminal(){
 		setUsername("Alice");
@@ -156,6 +155,12 @@ public class AliceTerminal extends User{
 	@Override
 	public void setUsername(String name) {
 		this.username=name;
+		
+	}
+
+	@Override
+	public void fourthStory() throws IOException {
+		// TODO Auto-generated method stub
 		
 	}
 }
