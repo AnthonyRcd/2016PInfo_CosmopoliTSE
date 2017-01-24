@@ -23,8 +23,10 @@ public class BobTerminal extends User {
 	}
 	
 	/***
-	 * 
-	 */
+	 * Première Story de Bob: M’aider à trouver des question existantes qui correspondent à mon besoin.
+	 * @author Bou-Zogheib Diane
+	 * @throws IOException
+	 ***/
 	@Override
 	public void firstStory() throws IOException
 	{
@@ -63,6 +65,11 @@ public class BobTerminal extends User {
     	}
 	
 	
+	/***
+	 * Deuxième Story de Bob: Me suggérer des mots clés à rajouter.
+	 * @author Leang Sébastien
+	 * @throws IOException
+	 ***/
 	@Override
 	public void secondStory() throws IOException
 	{
@@ -76,7 +83,11 @@ public class BobTerminal extends User {
 			System.out.println("Erreur");
 		}
 	}
-	
+	/***
+	 * Troisième Story de Bob: Me proposer des contributeurs à suivre.
+	 * @author Li Shule
+	 * @throws IOException
+	 ***/
 	@Override
 	public void thirdStory() throws IOException{
 		boolean continuer=false;
@@ -112,7 +123,11 @@ public class BobTerminal extends User {
 		while(continuer);
 	}
 	
-	
+	/***
+	 * Quatrième Story de Bob :M’indiquer les nouvelles questions (avec déjà des réponses) dans mes champs d’intérêt.
+	 * @author Li Shule
+	 * @throws IOException
+	 ***/
 	public void fourthStory() throws IOException
 	{
 		boolean continuer=false;

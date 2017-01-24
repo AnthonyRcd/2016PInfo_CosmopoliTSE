@@ -19,8 +19,16 @@ import TSE.P_INFO.CosmopoliTse.UsefulMethods.Methods;
 import TSE.P_INFO.CosmopoliTse.UsefulMethods.Methods.BadIdException;
 
 public class AliceGUI {
-	
-	public static synchronized Vector<URI> firstStoryGUI(int userid, JList<String> answerJList, JTextArea errorArea) throws JSONException
+	/**
+	 * Première story d'Alice : Quelles sont les nouvelles questions dans mes compétences ?
+	 * @author Bou-Zogheib Diane, Ricard Anthony
+	 * @param userid - l'id de l'utilisateur pour lequel on veut chercher les nouvelles questions
+	 * @param answerJList
+	 * @param errorArea - zone de l'interface graphique assignée à l'affichage du résultat de la requête
+	 * @version GUI
+	 * @throws JSONException
+	 */
+		public static synchronized Vector<URI> firstStoryGUI(int userid, JList<String> answerJList, JTextArea errorArea) throws JSONException
 	{
 		Vector<String> answerList = new Vector<String>();
 		Vector<URI> links = new Vector<URI>();
@@ -84,7 +92,16 @@ public class AliceGUI {
 		answerJList.setListData(answerList); answerJList.setLayoutOrientation(JList.VERTICAL);
 		return links;
 	}
-	
+/**
+ * Troisième sory d'Alice : Trier les questions auxquelles j’ai répondu en fonction de leur taux de succès.
+ * @author Li Shule, Ricard Anthony
+ * @param userid - l'id de l'utilisateur pour lequel on veut trier les questions.
+ * @param answerJList
+ * @param errorArea - zone de l'interface graphique assignée à l'affichage du résultat de la requête
+ * @return
+ * @version GUI
+ * @throws BadIdException
+ */
 	public static synchronized Vector<URI> thirdStoryGUI(int userid, JList<String> answerJList, JTextArea errorArea) throws BadIdException{
 		int page = 1;
 		Vector<String> answerList = new Vector<String>();

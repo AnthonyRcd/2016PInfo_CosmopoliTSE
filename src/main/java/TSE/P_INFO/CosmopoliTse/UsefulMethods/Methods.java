@@ -109,7 +109,7 @@ public class Methods{
 	}
 	
 	
-	//TODO Javadoc
+	//TODO
 	public static void fillUserScoreMap(JSONObject obj, Map<String,Long> userScoreMap){
 		for(int j=0;j<20;j++)
     	{
@@ -229,7 +229,13 @@ public class Methods{
 	}
 	
 	
-	//TODO Javadoc
+	/**
+	 * Description : La fonction returne la valeur max de la Collection
+	 * @author li Shule 
+	 * @param coll
+	 * @return max - La valeur max
+	 */
+	
 	public static Long getMax(Collection<Long> coll)
 	{
 		Long max = (long) 0;
@@ -241,7 +247,7 @@ public class Methods{
 		return max;
 	}
 	
-	//TODO Javadoc
+	//TODO	
 	public static void fillLinkMap(JSONObject obj, Map<String,URI> linkMap)
 	{
 		for(int i=0;i<20;i++)
@@ -273,7 +279,13 @@ public class Methods{
 		result = result.substring(0,result.length()-3);
 		return result;
 	}
-	
+	/**
+	 * Description : La méthode va prendre la question et mettre chaque mot de la question dans une map.
+	 * @author Leang Sébastien 
+	 * @param Question - Question que l'utilisateur pose
+	 * @return Map - Map contenant chaque mot de la question 
+	 * @throws JSONException
+	 */
 	public static HashMap <String, Integer> RecupérationMotQuestion(String Question) throws JSONException{
 		
 	    int firstChar = -1;
@@ -295,7 +307,13 @@ public class Methods{
 	    }
 		return MapMot;
 	}
-	
+	/**
+	 * Description : La méthode va parcourir la map et chercher si le mot a des relatedTags 
+	 * @author Leang Sébastien 
+	 * @param MapMot
+	 * @return ListeMotClef - Liste de mots clef potentiellement à ajouter
+	 * @throws IOException
+	 */
 	
 	public static ArrayList<String> Comparaison( Map<String, Integer> MapMot) throws IOException{
 		ArrayList<String> ListeMotClef = new ArrayList<String>();

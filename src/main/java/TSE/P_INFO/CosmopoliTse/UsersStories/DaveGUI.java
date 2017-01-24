@@ -159,7 +159,15 @@ public class DaveGUI{
     
     /*------Version JList------*/
     
-    //TODO Javadoc
+/**
+ * Première story de Dave : Trouver les personnes contribuant le plus à un sujet donné.
+ * @author Li SHule, Leang Sebastien, Ricard Anthony
+ * @param tag - le tag sur lequel l'utilisateur souhaite effectuer sa recherche
+ * @param answerJList
+ * @param errorArea - zone de l'interface graphique assignée à l'affichage du résultat de la requête
+ * @version GUI
+ * @return
+ */
     public static synchronized Vector<URI> firstStoryGUI(String tag, JList<String> answerJList, JTextArea errorArea){
 		Vector<String> answerList = new Vector<String>();
 		Vector<URI> links = new Vector<URI>();
@@ -197,8 +205,17 @@ public class DaveGUI{
 		return links;
 	}
     
+/**
+ * Deuxième story de Dave : Trouver la personne qui a le top tag dans un sujet donné.
+ * @author Ricard Anthony, Bou-Zogheib Diane
+ * @param Tag - le tag sur lequel l'utilisateur souhaite effectuer sa recherche
+ * @param answerList
+ * @param errorArea - zone de l'interface graphique assignée à l'affichage du résultat de la requête
+ * @version GUI
+ * @return
+ * @throws URISyntaxException
+ */
     
-    //TODO Javadoc
     public static synchronized URI secondStoryGUI(String Tag, JList<String> answerList, JTextArea errorArea) throws URISyntaxException{
     	String[] answers = new String[2];
     	String url = Methods.generateTagRequest(Tag);
@@ -219,8 +236,17 @@ public class DaveGUI{
     	return link;
     }
     
+    /**
+     * Troisième Story de Dave : Trouver la personne qui contribue le plus à un ensemble de tags donné.
+     * @author Li Shule, Ricard Anthony
+     * @param strings - tableau de chaînes de caractère permettant de récupérer les tags saisis par l'utilisateur
+     * @param answerJList
+     * @param errorArea - zone de l'interface graphique assignée à l'affichage du résultat de la requête
+     * @version GUI
+     * @return
+     * @throws URISyntaxException
+     */
     
-    //TODO Javadoc
     public static synchronized URI thirdStoryGUI(String[] strings, JList<String> answerJList, JTextArea errorArea) throws URISyntaxException{
     	String[] answer = new String[2];
     	URI link = new URI("http;//www.stackoverflow.com");
