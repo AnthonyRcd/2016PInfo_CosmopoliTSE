@@ -85,7 +85,7 @@ public class Bob {
 			int userid = input.nextInt();
 			List<String> toptagList = new ArrayList<String>();
 			Set<String> noms = new HashSet<String>();
-			String url0 = Methods.generateUserRequest(userid);
+			String url0 = Methods.generateTopTagsRequest(userid);
 	    	String jsonString0 = Methods.sendGet(url0);
 	    	JSONObject obj0= new JSONObject(jsonString0);
 	    	if(obj0.getJSONArray("items").length()==0){
