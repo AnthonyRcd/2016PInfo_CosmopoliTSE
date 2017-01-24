@@ -109,7 +109,11 @@ public class Methods{
 	}
 	
 	
-	//TODO
+	/**
+	 * Méthode qui donne le nombre de postes d'un user pour d'un ensemble de tags donnés 
+	 * @param obj - Objet JSON contenant les données récupérées sur le site
+	 * @param userScoreMap - Map contenant le nom de l'utilisateur et le nombre de postes qu'il a fait
+	 */
 	public static void fillUserScoreMap(JSONObject obj, Map<String,Long> userScoreMap){
 		for(int j=0;j<20;j++)
     	{
@@ -230,8 +234,8 @@ public class Methods{
 	
 	
 	/**
-	 * Description : La fonction returne la valeur max de la Collection
-	 * @author li Shule 
+	 * Description : La méthode returne la valeur max de la Collection
+	 * @author Ricard Anthony
 	 * @param coll
 	 * @return max - La valeur max
 	 */
@@ -247,7 +251,11 @@ public class Methods{
 		return max;
 	}
 	
-	//TODO	
+	/**
+	 * Méthode qui renvoie les liens vers le profile des utilisateurs
+	 * @param obj - objet json contenant le resultat de la requête
+	 * @param linkMap
+	 */
 	public static void fillLinkMap(JSONObject obj, Map<String,URI> linkMap)
 	{
 		for(int i=0;i<20;i++)
