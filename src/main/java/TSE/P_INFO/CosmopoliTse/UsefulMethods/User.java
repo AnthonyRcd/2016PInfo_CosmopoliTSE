@@ -113,22 +113,22 @@ public abstract class User{
 	    		  break;
 	    	  case 4:
 	    		  u.fourthStory();
-    		  System.out.println();
-    		  do
-    		  {
-    			  System.out.println("Souhaitez-vous effectuer une autre recherche? y/n");
-	    		  reponse=in.next();
-    			  if(reponse.equals("y"))
-    				  continuer=true;
-    			  else if (reponse.equals("n"))
-    			  {
-    				  System.out.println("Arrêt de l'application...");
-    				  continuer=false;  
-    			  }
-    			  else
-    				  System.out.println("Choix incorrect.");
-    		  }while(!(reponse.equals("y") || reponse.equals("n")));
-    		  break;
+	    		  System.out.println();
+	    		  do
+	    		  {
+	    			  System.out.println("Souhaitez-vous effectuer une autre recherche? y/n");
+		    		  reponse=in.next();
+	    			  if(reponse.equals("y"))
+	    				  continuer=true;
+	    			  else if (reponse.equals("n"))
+	    			  {
+	    				  System.out.println("Arrêt de l'application...");
+	    				  continuer=false;  
+	    			  }
+	    			  else
+	    				  System.out.println("Choix incorrect.");
+	    		  }while(!(reponse.equals("y") || reponse.equals("n")));
+	    		  break;
 	    	  default:
 	    		  System.out.println("Erreur de choix, veuillez recommencer.");
 	    		  System.out.println();

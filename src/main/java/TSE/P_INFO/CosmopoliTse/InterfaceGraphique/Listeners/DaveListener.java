@@ -104,7 +104,6 @@ public class DaveListener implements ActionListener, FocusListener, MouseListene
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		int user = dave.getAnswerList().getSelectedIndex();
 		try {
 			if(user!=0) Desktop.getDesktop().browse(links.get(user-1));
@@ -115,26 +114,18 @@ public class DaveListener implements ActionListener, FocusListener, MouseListene
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 

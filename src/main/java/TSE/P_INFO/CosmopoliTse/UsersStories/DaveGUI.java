@@ -25,9 +25,8 @@ public class DaveGUI{
 	 * Première Story de Dave: Trouver les personnes contribuant le plus à un sujet donné
 	 * @author Li SHule, Leang Sebastien, Ricard Anthony
 	 * @param tag - le tag sur lequel l'utilisateur souhaite effectuer sa recherche
-	 * @param count - le nombre de contributeurs que l'utilisateur souhaite afficher
-	 * @param firstStoryAnswerLabel - zone de l'interface graphique assignée à l'affichage du résultat final
-	 * @throws IOException
+	 * @param answerArea - zone dans laquelle s'affiche le résultat
+	 * @param errorArea - zone dans la quelle s'affichent les erreurs
 	 * @version GUI
 	 ***/
 	public static synchronized void firstStoryGUI(String tag, JTextPane answerArea, JTextArea errorArea){
@@ -69,7 +68,7 @@ public class DaveGUI{
      * @param Tag - le tag sur lequel l'utilisateur souhaite effectuer sa recherche
      * @version GUI
      * @param answerArea - zone de l'interface graphique assignée à l'affichage du résultat de la requête
-     * @throws IOException
+     * @param errorArea - zone dans laquelle s'affichent les messages d'erreur
      ***/
     public static synchronized void secondStoryGUI(String Tag,JTextPane answerArea, JTextArea errorArea){
     	String url = Methods.generateTagRequest(Tag);
@@ -91,11 +90,8 @@ public class DaveGUI{
      * Troisième Story de Dave: Trouver la personne qui contribue le plus à un ensemble de tags donné
      * @author Li Shule, Ricard Anthony
      * @param strings - tableau de chaînes de caractère permettant de récupérer les tags saisis par l'utilisateur
-     * @param nombre - nombre de tags sur lequel l'utilisateur veut effectuer la requête
-     * @param thirdStoryAnswerLabel - zone de l'interface graphique assignée à l'affichage du résultat final
-     * @param insertTag - zone de l'interface graphique dans laquelle l'utilisateur saisit les tags
-     * @param errorLabel - zone de l'interface graphique assignée à l'affichage de tags erronés le cas échéant
-     * @throws IOException
+     * @param answerArea - zone de l'interface graphique où s'affiche le résultat
+     * @param errorArea - zone de l'interface graphique assignée à l'affichage de tags erronés le cas échéant
      * @version GUI
      ***/
     public static synchronized void thirdStoryGUI(String[] strings, JTextPane answerArea, JTextArea errorArea){

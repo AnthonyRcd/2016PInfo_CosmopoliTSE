@@ -1,7 +1,6 @@
 package TSE.P_INFO.CosmopoliTse.UsersStories;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -54,15 +53,16 @@ public class BobTerminal extends User {
         relatedQuestions = obj.getJSONArray("items").getJSONObject(0).getString("title");
     	System.out.println("Les questions correspondants à votre besoin sont :");
         	
-        	for (int k = 0; k < 10; k++)
-        	{
-        		String titreQuestions = obj.getJSONArray("items").getJSONObject(k).getString("title");
-        		String lienQuestions = obj.getJSONArray("items").getJSONObject(k).getString("link");
-        		System.out.println((k+1) + "." + StringEscapeUtils.unescapeHtml4(titreQuestions));
-        		System.out.println(lienQuestions);
-        	}
-        	System.out.println("");
+    	for (int k = 0; k < 10; k++)
+    	{
+    		String titreQuestions = obj.getJSONArray("items").getJSONObject(k).getString("title");
+    		String lienQuestions = obj.getJSONArray("items").getJSONObject(k).getString("link");
+    		System.out.println((k+1) + "." + StringEscapeUtils.unescapeHtml4(titreQuestions));
+    		System.out.println(lienQuestions);
     	}
+    	
+    	System.out.println("");
+		}
 	
 	
 	/***
@@ -77,7 +77,11 @@ public class BobTerminal extends User {
 		try{
 			input = new Scanner(System.in);
 			String question = input.nextLine();
-			System.out.println(Methods.Comparaison(Methods.RecupérationMotQuestion(question)));
+			ArrayList<String> list = Methods.Comparaison(Methods.RecuperationMotQuestion(question));
+			if(!list.isEmpty())
+				System.out.println(list);
+			else
+				System.out.println("Pas de mot clef à ajouter.");
 		}
 		 catch (JSONException j) {
 			System.out.println("Erreur");
@@ -140,8 +144,7 @@ public class BobTerminal extends User {
 			List<String> toptagList = new ArrayList<String>();
 			
 	    	String url1 = Methods.generateTopTagsRequest(userid);
-	    	String jsonString1 = Methods.sendGet(url1);
-	    	JSONObject obj1= new JSONObject(jsonString1);
+	    	JSONObject obj1= Methods.generateJSONObject(url1);
 	    	System.out.println("Les les nouvelles 10 question: ");
 	    	if(obj1.getJSONArray("items").length()==0){
 	    		System.out.println("Userid "+ userid +" pas trouver, veuillez refaire cette recherche ");

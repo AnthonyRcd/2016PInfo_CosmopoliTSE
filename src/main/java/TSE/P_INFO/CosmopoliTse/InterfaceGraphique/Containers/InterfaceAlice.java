@@ -1,18 +1,5 @@
 package TSE.P_INFO.CosmopoliTse.InterfaceGraphique.Containers;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
-
 @SuppressWarnings("serial")
 public class InterfaceAlice extends UserInterface{
 	

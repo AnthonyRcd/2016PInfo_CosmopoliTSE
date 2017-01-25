@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import TSE.P_INFO.CosmopoliTse.InterfaceGraphique.Listeners.*;
+
 @SuppressWarnings("serial")
 public class GlobalInterface extends JPanel{
 
@@ -22,16 +24,18 @@ public class GlobalInterface extends JPanel{
 		JScrollPane scrollPane = new JScrollPane(tabbedPane);
 	
 		DaveListener daveL = new DaveListener();
-		JPanel dave = daveL.dave;
+		JPanel dave = daveL.getDave();
 		tabbedPane.addTab("Dave", dave);
 		tabbedPane.setToolTipTextAt(0, "Chasseur de têtes, cherche des profils intéressants");
 		
 		AliceListener aliceL = new AliceListener();
-		JPanel alice = aliceL.alice;
+		JPanel alice = aliceL.getAlice();
+		aliceL.getAlice();
 		tabbedPane.addTab("Alice", alice);
 		tabbedPane.setToolTipTextAt(1, "Développeuse confirmée, collectionneuse de badges");
 		
-		JPanel bob = new JPanel();
+		BobListener bobL = new BobListener();
+		JPanel bob = bobL.getBob();
 		tabbedPane.addTab("Bob", bob);
 		tabbedPane.setToolTipTextAt(2, "Développeur débutant, cherche des réponses à ses problèmes");
 		

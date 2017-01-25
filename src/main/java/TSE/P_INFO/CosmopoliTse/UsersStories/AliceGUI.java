@@ -28,8 +28,7 @@ public class AliceGUI {
 	 * @version GUI
 	 * @throws JSONException
 	 */
-		public static synchronized Vector<URI> firstStoryGUI(int userid, JList<String> answerJList, JTextArea errorArea) throws JSONException
-	{
+		public static synchronized Vector<URI> firstStoryGUI(int userid, JList<String> answerJList, JTextArea errorArea) throws JSONException{
 		Vector<String> answerList = new Vector<String>();
 		Vector<URI> links = new Vector<URI>();
 		String url = Methods.generateTopTagsRequest(userid);
@@ -48,7 +47,7 @@ public class AliceGUI {
 		while (cpt < 10)
 		{
 			try{
-				url = "https://api.stackexchange.com/2.2/questions/no-answers?order=desc&sort=creation&tagged="+URLEncoder.encode(tag, "utf-8")+"&site=stackoverflow";
+				url = "https://api.stackexchange.com/2.2/questions/no-answers?order=desc&sort=creation&tagged="+URLEncoder.encode(tag, "utf-8")+"&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
 				obj= Methods.generateJSONObject(url);
 			}catch(Exception e){
 				System.err.println(e);
@@ -88,7 +87,6 @@ public class AliceGUI {
 				}
 			}
 		}
-		System.out.println(obj.get("quota_remaining"));
 		answerJList.setListData(answerList); answerJList.setLayoutOrientation(JList.VERTICAL);
 		return links;
 	}
@@ -117,7 +115,7 @@ public class AliceGUI {
 			questionIdList.add(Methods.getQuestionId(obj, j).toString());
 		}
     	
-    	String url = "https://api.stackexchange.com/2.2/questions/"+ String.join(";",questionIdList) +"?order=desc&sort=votes&site=stackoverflow";
+    	String url = "https://api.stackexchange.com/2.2/questions/"+ String.join(";",questionIdList) +"?order=desc&sort=votes&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
     	obj = Methods.generateJSONObject(url); 
     	
     	answerList.add("Les meilleurs questions auxquelles vous avez répondu sont: ");
@@ -131,8 +129,6 @@ public class AliceGUI {
     			System.err.println(e);
     		}
     	}
-    	
-    	System.out.println(obj.getInt("quota_remaining"));
     	answerJList.setListData(answerList); answerJList.setLayoutOrientation(JList.VERTICAL);
     	return links;
 	}

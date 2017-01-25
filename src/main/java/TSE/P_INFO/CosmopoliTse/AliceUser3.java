@@ -14,52 +14,21 @@ import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
+import javax.print.attribute.standard.RequestingUserName;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import TSE.P_INFO.CosmopoliTse.UsefulMethods.Methods;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 public class AliceUser3 {
+	
 	static String APIclef = "knaK2OI6lGZq*Cx4H439cw((";
 	private static Scanner input= new Scanner(System.in);
-	public static String uncompress(GZIPInputStream in) throws IOException {   
-		 if (in == null) {   
-			 return "";   
-		 }   
-		 ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[256];
-		 int n;   
-		 while ((n = in.read(buffer))>= 0) {   
-		 	out.write(buffer, 0, n);   
-		 }   
-		 return out.toString("utf-8");
-	}   
-
-	public static String sendGet(String url) throws IOException {
-       String result = "";
-       GZIPInputStream in = null;
-       
-       try {
-       	URL realUrl = new URL(url);
-           URLConnection connection = realUrl.openConnection();
-           connection.setRequestProperty("accept", "*/*");
-           connection.setRequestProperty("connection", "Keep-Alive");
-           connection.connect();
-           in = new GZIPInputStream(connection.getInputStream());    
-  		    result = uncompress(in);
-  		 	return result;
-           
-       } 
-       catch (Exception e) {
-           System.out.println("error in http get!" + e);
-           e.printStackTrace();
-       }
-       finally {
-           in.close();
-       }
-       return result;
-       }
+	
 	public static void CompareBadges() throws JSONException, IOException{
 		try{
 			System.out.println("Entrer l'id d'un utilisateur");
@@ -77,27 +46,25 @@ public class AliceUser3 {
 	public static void ComparaisonBadge(int userid) throws JSONException, IOException{
 		// Requete noms badges de l'utilisateur:
 		String urlNomsBadges = "https://api.stackexchange.com/2.2/users/"+userid+"/badges?order=desc&sort=awarded&site=stackoverflow&key="+APIclef;
-		String jsonString4 = AliceUser3.sendGet(urlNomsBadges);
+		String jsonString4 = Methods.sendGet(urlNomsBadges);
 		JSONObject objNomsBadges= new JSONObject(jsonString4);
 		JSONArray arrayNomsBadges = objNomsBadges.getJSONArray("items");
 		System.out.println(" 3 meilleurs badges (or, argent, bronze) avec pour chaque 3 utilisateurs ayant les mêmes:");
-		ListeBadgeClassé(sortByValue(ajouterDanstableauBadgesAwarded(arrayNomsBadges)),ajouterDanstableauBadgesRank(arrayNomsBadges), "gold");
-		ListeBadgeClassé(sortByValue(ajouterDanstableauBadgesAwarded(arrayNomsBadges)),ajouterDanstableauBadgesRank(arrayNomsBadges), "silver");
-		ListeBadgeClassé(sortByValue(ajouterDanstableauBadgesAwarded(arrayNomsBadges)),ajouterDanstableauBadgesRank(arrayNomsBadges), "bronze");
+		ListeBadgeClasse(sortByValue(ajouterDanstableauBadgesAwarded(arrayNomsBadges)),ajouterDanstableauBadgesRank(arrayNomsBadges), "gold");
+		ListeBadgeClasse(sortByValue(ajouterDanstableauBadgesAwarded(arrayNomsBadges)),ajouterDanstableauBadgesRank(arrayNomsBadges), "silver");
+		ListeBadgeClasse(sortByValue(ajouterDanstableauBadgesAwarded(arrayNomsBadges)),ajouterDanstableauBadgesRank(arrayNomsBadges), "bronze");
 	}
 	
 	/**
 	 * Permet de trier les meilleurs badges par awarded dans le sens ascendant
 	 *  puis les remet dans le sens descendant. 
-	 * @param Occurence
-	 * @param nomBadges_id
+	 * @param arrayNomsBadgesUser
 	 * @throws JSONException 
+	 * @return
 	 */
 	public static Map<String, Integer> ajouterDanstableauBadgesAwarded(JSONArray arrayNomsBadgesUser) throws JSONException{
-		/**
-		 * 
-		 * Tableau contenant les occurences des badges et leurs noms
-		 */
+ 
+		//Tableau contenant les occurences des badges et leurs noms
 		Map<String,Integer> MAPAwarded = new LinkedHashMap<String,Integer>();
 		String nomBadges_id = "";
 		int Occurence = 0;	
@@ -155,11 +122,13 @@ public class AliceUser3 {
 	
 	/**
 	 * Fonction : permet d'afficher les  badges, leurs occurences, leurs rangs, et les badges suppérieurs. 
-	 * @param hm
+	 * @param hmAw
+	 * @param hmRank
+	 * @param rank
 	 * @throws JSONException 
 	 * @throws IOException 
 	 */
-	public static void ListeBadgeClassé(Map<String,Integer> hmAw ,Map<String,String> hmRank, String rank) throws JSONException, IOException{ 
+	public static void ListeBadgeClasse(Map<String,Integer> hmAw ,Map<String,String> hmRank, String rank) throws JSONException, IOException{ 
 		int i = 0;
 		System.out.println("\nLa liste des badges " + rank +" classé par awarded : ");
 		for (Map.Entry<String, Integer> elementAw : hmAw.entrySet()){
@@ -311,7 +280,7 @@ public class AliceUser3 {
 	
 	/**
 	 * Fonction : Récupere l'utilisateur d'un badge à l'aide du nom et de l'id du badge.
-	 * @param NameBadge
+	 * @param nameBadge
 	 * @return
 	 * @throws JSONException
 	 * @throws IOException 
@@ -320,12 +289,12 @@ public class AliceUser3 {
 		ArrayList <String> ListUserNameSup= new ArrayList<String>();
 		nameBadge = nameBadge.replaceAll("\\s","%20");
 		String urlIDBadges = "https://api.stackexchange.com/2.2/badges/name?pagesize=100&order=desc&sort=rank&inname="+nameBadge+"&site=stackoverflow&key="+APIclef;
-		String jsonString5 = AliceUser3.sendGet(urlIDBadges);
+		String jsonString5 = Methods.sendGet(urlIDBadges);
 		JSONObject objIDBadges= new JSONObject(jsonString5);
 		JSONArray arrayIDBadges = objIDBadges.getJSONArray("items");
 		int id = arrayIDBadges.getJSONObject(0).getInt("badge_id");
 		String urlNomUserBadges = "https://api.stackexchange.com/2.2/badges/"+id+"/recipients?site=stackoverflow&key="+APIclef;
-		String jsonString6 = AliceUser3.sendGet(urlNomUserBadges);
+		String jsonString6 = Methods.sendGet(urlNomUserBadges);
 		JSONObject objNomUserBadges= new JSONObject(jsonString6);
 		JSONArray arrayNomUserBadges = objNomUserBadges.getJSONArray("items");
 		for (int i = 0; i<3; i++){
@@ -338,7 +307,7 @@ public class AliceUser3 {
 	/**
 	 * Cette fonction permet d'afficher les utilisateurs qui ont plus en Awkward sur un badge que l'utilisateur possède.
 	 * @param aw
-	 * @param NomBadge
+	 * @param nameBadge
 	 * @return
 	 * @throws JSONException
 	 * @throws IOException 
@@ -350,7 +319,7 @@ public class AliceUser3 {
 		int ID_utilisateur =0;
 		//pour tous les utilisateurs
 		String urlalluser = "https://api.stackexchange.com/2.2/users?pagesize=100&order=desc&sort=reputation&site=stackoverflow&key="+APIclef;
-		String jsonString7 = AliceUser3.sendGet(urlalluser);
+		String jsonString7 = Methods.sendGet(urlalluser);
 		JSONObject objAllUser = new JSONObject(jsonString7);
 		JSONArray arrayAllUser = objAllUser.getJSONArray("items");
 		
@@ -360,7 +329,7 @@ public class AliceUser3 {
 			ID_utilisateur = arrayAllUser.getJSONObject(i).getInt("user_id");
 			// Reccupération de tous les badges de l'utilisateur
 			String urlNameBadgeUser = "https://api.stackexchange.com/2.2/users/"+ID_utilisateur+"/badges?order=desc&sort=awarded&site=stackoverflow&key="+APIclef;
-			String jsonString8 = AliceUser3.sendGet(urlNameBadgeUser);
+			String jsonString8 = Methods.sendGet(urlNameBadgeUser);
 			JSONObject objNameBadgeUser = new JSONObject(jsonString8);
 			JSONArray arrayNameBadgeUser = objNameBadgeUser.getJSONArray("items");
 			for (int j = 0; j < arrayNameBadgeUser.length(); j++) {

@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
@@ -77,7 +78,6 @@ public class Methods{
 	 * @param count - Nombre de contributeurs à afficher
 	 * @param contributors - Map contenant en Clés les noms des contributeurs et en Valeurs le nombre de réponses apportées
 	 * @param contributorsPostCount - Liste contenant le nombre de réponses apportées pour chaque contributeur
-	 * @see fillContributorsList
 	 */
 	public static void printContributors(int count, Map<String,Long> contributors, List<Long> contributorsPostCount){
 		for(int i=19;i>=19-(count-1);i--)
@@ -96,7 +96,6 @@ public class Methods{
 	 * @param obj - Objet JSON contenant les données récupérées sur le site
 	 * @param contributors - Map de correspondance Nom/"Post Count"
 	 * @param contributorsPostCount - Liste contenant les "post_count" de tous le contributeurs
-	 * @see printContributors, getUserName
 	 */
 	public static void fillContibutorsList(JSONObject obj, Map<String,Long> contributors, List<Long> contributorsPostCount){
 		for(int i=0;i<20;i++)
@@ -165,7 +164,6 @@ public class Methods{
 	 * Méthode permettant de générer un objet JSON à partir d'une String
 	 * @param url - String à convertir en objet JSON
 	 * @return Un objet JSON contenant les donées de "url"
-	 * @throws IOException
 	 * @see sendGet
 	 */
 	public static JSONObject generateJSONObject(String url){
@@ -214,7 +212,7 @@ public class Methods{
 	 * @return Une String contenant l'url pour laquelle on effectuera la requête HTTP
 	 */
 	public static String generateTopTagsRequest(int userid) {
-		return "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?pagesize=6&site=stackoverflow";
+		return "https://api.stackexchange.com/2.2/users/"+ userid +"/top-tags?pagesize=6&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
 	}
 
 	
@@ -222,13 +220,12 @@ public class Methods{
 	 * Méthode permettant de générer une url pour récupérer les meilleurs "repondeurs" pour un tag donné
 	 * @param tag - Tag pour lequel on souhaite effectuer la recherche
 	 * @return Une String contenant l'url pour laquelle on effectuera la requête HTTP
-	 * @throws UnsupportedEncodingException
 	 */
 	public static String generateTagRequest(String tag) {
 		try{
 			return "https://api.stackexchange.com/2.2/tags/" + URLEncoder.encode(tag, "utf-8") + "/top-answerers/all_time?page=1&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
 		}catch(UnsupportedEncodingException uee){
-			return "https://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time?page=1&site=stackoverflow";
+			return "https://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time?page=1&site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
 		}
 	}
 	
@@ -274,6 +271,11 @@ public class Methods{
 		
 	}
 	
+	@SuppressWarnings("serial")
+	public static class EmptyFieldException extends Exception{
+		
+	}
+	
 	public static String createTagString(List<String> ll, Integer length) throws UnsupportedEncodingException{
 		String result = String.join(";", ll.subList(0, length));
 		return URLEncoder.encode(result,"utf-8");
@@ -294,7 +296,7 @@ public class Methods{
 	 * @return Map - Map contenant chaque mot de la question 
 	 * @throws JSONException
 	 */
-	public static HashMap <String, Integer> RecupérationMotQuestion(String Question) throws JSONException{
+	public static HashMap <String, Integer> RecuperationMotQuestion(String Question) throws JSONException{
 		
 	    int firstChar = -1;
 	    int length = 0;
@@ -327,7 +329,7 @@ public class Methods{
 		ArrayList<String> ListeMotClef = new ArrayList<String>();
 	
 		for (String e : MapMot.keySet()){
-			String urlRelatedTag = "https://api.stackexchange.com/2.2/tags/"+ e + "/related?site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
+			String urlRelatedTag = "https://api.stackexchange.com/2.2/tags/"+ URLEncoder.encode(e, "utf-8") + "/related?site=stackoverflow&key=TWJoclGjmJo5yUlPKN4TbQ((";
 			JSONObject RelatedTags = Methods.generateJSONObject(urlRelatedTag);
 			JSONArray TagsArrayRelated = RelatedTags.getJSONArray("items");
 			if(TagsArrayRelated.length()!=0)
@@ -335,9 +337,7 @@ public class Methods{
 					ListeMotClef.add(TagsArrayRelated.getJSONObject(i).getString("name"));
 		}
 		
-		if (ListeMotClef.isEmpty())
-			System.out.println("Pas de mot clef à ajouter");
-		
 		return ListeMotClef;
 	}
+	
 }

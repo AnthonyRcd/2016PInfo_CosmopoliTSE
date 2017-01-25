@@ -62,7 +62,7 @@ public class AliceListener implements ActionListener, MouseListener, FocusListen
 					alice.getAnswerList().setVisible(true);
 					alice.getErrorArea().setText("");alice.getErrorArea().setVisible(false); //links.clear();
 					try{
-						links=AliceGUI.firstStoryGUI(Integer.parseInt(alice.getSubject().getText()),alice.getAnswerList(), alice.getErrorArea());
+						setLinks(AliceGUI.firstStoryGUI(Integer.parseInt(alice.getSubject().getText()),alice.getAnswerList(), alice.getErrorArea()));
 					}catch(Exception ex){
 						alice.getAnswerList().setVisible(false);
 						System.err.println(ex);
@@ -84,7 +84,7 @@ public class AliceListener implements ActionListener, MouseListener, FocusListen
 					alice.getAnswerList().setVisible(true);
 					alice.getErrorArea().setText("");alice.getErrorArea().setVisible(false); //links.clear();
 					try{
-						links = AliceGUI.thirdStoryGUI(Integer.parseInt(alice.getSubject().getText()),alice.getAnswerList(), alice.getErrorArea());
+						setLinks(AliceGUI.thirdStoryGUI(Integer.parseInt(alice.getSubject().getText()),alice.getAnswerList(), alice.getErrorArea()));
 					}catch(Exception ex){
 						alice.getAnswerList().setVisible(false);
 						System.err.println(ex);
@@ -104,7 +104,6 @@ public class AliceListener implements ActionListener, MouseListener, FocusListen
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		int user = alice.getAnswerList().getSelectedIndex();
 		try {
 			if(user!=0) Desktop.getDesktop().browse(links.get(user-1));
@@ -115,26 +114,18 @@ public class AliceListener implements ActionListener, MouseListener, FocusListen
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -149,8 +140,6 @@ public class AliceListener implements ActionListener, MouseListener, FocusListen
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

@@ -19,6 +19,18 @@ public class UserInterface extends JPanel{
 	
 	protected JButton search1 = new JButton("1ère Story");
 	protected JButton search2 = new JButton("2ème Story");
+	protected JButton search3 = new JButton("3ème Story");
+	
+	protected JLabel subjectInstructions;
+	protected JTextField subject;
+	
+	protected JList<String> answerList;
+	protected JTextArea errorArea;
+	
+	JPanel userPanel;
+	JPanel searchPanel;
+	JPanel buttonPanel;
+	
 	public JButton getSearch1() {
 		return search1;
 	}
@@ -75,15 +87,7 @@ public class UserInterface extends JPanel{
 		this.errorArea = errorArea;
 	}
 
-	protected JButton search3 = new JButton("3ème Story");
 	
-	protected JLabel subjectInstructions;
-	protected JTextField subject;
-	
-	protected JList<String> answerList;
-	protected JTextArea errorArea;
-	
-		
 	public UserInterface(){
 		super();
 		add(makePanel());
@@ -94,15 +98,15 @@ public class UserInterface extends JPanel{
 		//Container of the whole frame
 		BorderLayout globalLayout = new BorderLayout();
 		globalLayout.setVgap(40); globalLayout.setHgap(25);
-		JPanel userPanel = new JPanel(); userPanel.setLayout(globalLayout);
+		userPanel = new JPanel(); userPanel.setLayout(globalLayout);
 		
 		//Container of the search field and the buttons
-		JPanel searchPanel = new JPanel();
+		searchPanel = new JPanel();
 		subjectInstructions = new JLabel();
 		subject = new JTextField(10);
 		
 		//Container of the buttons only
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new JPanel();
 		search1.setName("story1"); search2.setName("story2"); search3.setName("story3");
 		
 		buttonPanel.setLayout(new FlowLayout());
@@ -140,6 +144,7 @@ public class UserInterface extends JPanel{
 		userPanel.add(searchPanel,BorderLayout.PAGE_START); 
 		userPanel.add(answerList,BorderLayout.CENTER);
 		userPanel.add(errorArea, BorderLayout.PAGE_END); 
+		
 		
 		return userPanel;
 	}
