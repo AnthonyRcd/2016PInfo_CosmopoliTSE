@@ -12,3 +12,13 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2017-10-10 22:55:25.198 -----------------------------------------------
+eclipse.buildId=4.6.0.I20160606-1100
+java.version=1.8.0_101
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -data C:\Users\Anthony\Documents\Scolaire\TSE\FISE 2\INFO3\2016PInfo_CosmopoliTSE -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.oomph.setup.ui 1 0 2017-10-10 22:57:14.516
+!MESSAGE Setup tasks were performed during startup updating 5 preferences. See 'C:\Users\Anthony\eclipse\java-neon\eclipse\configuration\org.eclipse.oomph.setup\setup.log' for details
